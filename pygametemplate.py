@@ -151,15 +151,26 @@ def main ():
       #move canabal
       dist = math.sqrt((playerrect.centerx-canabalRect.centerx)**2 + (playerrect.centery-canabalRect.centery)**2)
       if dist < 550:
+        oldRect = pygame.Rect(canabalRect.x, canabalRect.y, canabalRect.width, canabalRect.height)
+        print(oldRect)
+        print(canabalRect)
         if canabalRect.centerx > playerrect.centerx:
           canabalRect.move_ip(-3,0)
         if canabalRect.centerx < playerrect.centerx:
           canabalRect.move_ip(3,0)
-
+        for rock in rocks:
+          if CollisionDetected(canabalRect, rock):
+            canabalRect = oldRect
+            break
         if canabalRect.centery > playerrect.centery:
           canabalRect.move_ip(0,-3)
         if canabalRect.centery < playerrect.centery:
           canabalRect.move_ip(0,3)
+
+        for rock in rocks:
+          if CollisionDetected(canabalRect, rock):
+            canabalRect = oldRect
+            break
       #Example of moving a rocket sprite left and right with keyboard
       if keys[pygame.K_LEFT]:
         bgRect.move_ip(10,0)

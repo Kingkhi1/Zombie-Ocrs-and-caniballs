@@ -73,8 +73,7 @@ def main ():
   colliding = False
   rockPic = pygame.image.load("rock.png")
   rockPic = pygame.transform.scale(rockPic, (50, 50))
-  rockRect = rockPic.get_rect() 
-  rockRect.center = (-100,-100)
+  rocks = []
 
   #Ship Lives Variables
   smallPic = pygame.image.load("zombie2.png")
@@ -165,19 +164,19 @@ def main ():
       if keys[pygame.K_LEFT]:
         bgRect.move_ip(10,0)
         canabalRect.move_ip(10,0)
-        rockRect.move_ip(10,0)
+        for rock in rocks: rock.move_ip(10,0)
  
       if keys [pygame.K_RIGHT]:
         bgRect.move_ip(-10,0)
-        rockRect.move_ip(-10,0)
+        for rock in rocks: rock.move_ip(-10,0)
         canabalRect.move_ip(-10,0)
       if keys[pygame.K_UP]:
         bgRect.move_ip(0,10)
-        rockRect.move_ip(0,10)
+        for rock in rocks: rock.move_ip(0,10)
         canabalRect.move_ip(0,10)
       if keys [pygame.K_DOWN]:
         bgRect.move_ip(0,-10)
-        rockRect.move_ip(0,-10)
+        for rock in rocks: rock.move_ip(0,-10)
         canabalRect.move_ip(0,-10)
             
       #Example of moving a rocket sprite left and right with DPAD
@@ -191,10 +190,9 @@ def main ():
 
       #Example of firing bullet with keyboard
       if keys [pygame.K_SPACE]:
-        laserSound.play()
-        showBullet = True
         rockRect = rockPic.get_rect()
         rockRect.center = (playerrect.centerx,playerrect.centery)
+        rocks.append(rockRect)
 
       #Example of firing bullet with controller
       #if gamepad.get_button(0):
@@ -237,8 +235,8 @@ def main ():
       screen.blit(smallPic,small1Rect)
       screen.blit(smallPic,small2Rect)
       screen.blit(canabalPic,canabalRect)
-      if showBullet:
-        screen.blit(rockPic,rockRect)
+      for rock in rocks:
+        screen.blit(rockPic,rock)
     
     elif gamestate == GameState.GAMEOVER:
       endPic = pygame.transform.rotate (endPic, 180)

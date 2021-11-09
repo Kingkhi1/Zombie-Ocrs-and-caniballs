@@ -84,9 +84,9 @@ def main ():
   small2Rect.center = (width//12+50,height//12)
 
   #Player Ship Variables
-  zombie2pic = pygame.image.load("zombie2.png")
-  zombie2pic = pygame.transform.scale(zombie2pic, (75, 75))
-  playerrect = zombie2pic.get_rect() 
+  ericpic = pygame.image.load("eric.png")
+  ericpic = pygame.transform.scale(ericpic, (75, 75))
+  playerrect = ericpic.get_rect() 
   playerrect.center = (width//2,height//2)
   
   #UFO Ship Variables
@@ -242,7 +242,7 @@ def main ():
 
     elif gamestate == GameState.GAMEPLAY:
       screen.blit(bgPic,bgRect)
-      screen.blit(zombie2pic,playerrect)
+      screen.blit(ericpic,playerrect)
       screen.blit(smallPic,small1Rect)
       screen.blit(smallPic,small2Rect)
       screen.blit(canabalPic,canabalRect)

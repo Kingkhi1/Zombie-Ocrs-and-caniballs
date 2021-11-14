@@ -31,7 +31,7 @@ class GameWindow:
     def __init__(self):
         self.width = 1024
         self.height = 1024
-        pygame.display.set_caption("Game Name")
+        pygame.display.set_caption("Game")
         self.display = pygame.display.set_mode((self.width, self.height)) #is it called display?
 gameWindow = GameWindow()
 
@@ -60,14 +60,14 @@ class ImageSprite():
 
 #Player movement from 0,0
 camera_pos = (0, 0)
-background = ImageSprite("island.png", 4096, 4096, 0, 0)
+background = ImageSprite("media/background.png", 4096, 4096, 0, 0)
 
 class Player(ImageSprite):
     def __init__(self, image, width, height, x, y):
         extClass = super()
         extClass.__init__(image, width, height, x, y)
-        self.health = 3
-player = Player('eric.png', 75, 75, gameWindow.width//2,gameWindow.height//2)
+        self.health = 6
+player = Player('media/player.png', 75, 75, gameWindow.width//2,gameWindow.height//2)
 
 class Entity(ImageSprite):
     def __init__(self, image, width, height, x, y, type=None):
@@ -75,7 +75,7 @@ class Entity(ImageSprite):
         extClass.__init__(image, width, height, x, y)
         self.type = type
 entities = [
-    Entity('canabal.png', 90, 90, -100, -100)
+    Entity('media/cannibal.png', 90, 90, -100, -100)
 ]
 
 class Rock(ImageSprite):
@@ -85,24 +85,23 @@ class Rock(ImageSprite):
         self.health = 100
 rocks = []
 
-#Health?
-"""
-smallPic = pygame.image.load("zombie2.png")
-smallPic =  pygame.transform.scale(smallPic, (30, 40))
-small1Rect = smallPic.get_rect() 
-small2Rect = smallPic.get_rect() 
-small1Rect.center = (gameWindow.width//12,gameWindow.height//12)
-small2Rect.center = (gameWindow.width//12+50,gameWindow.height//12)"""
+heartImageSize = 9 * 5
+heartsSpacing = 60
+hearts = [
+    [ImageSprite('media/heart.png', heartImageSize, heartImageSize, 50, 50), ImageSprite('media/half_heart.png', heartImageSize, heartImageSize, 50, 50)], 
+    [ImageSprite('media/heart.png', heartImageSize, heartImageSize, 50+heartsSpacing, 50), ImageSprite('media/half_heart.png', heartImageSize, heartImageSize, 50+heartsSpacing, 50)], 
+    [ImageSprite('media/heart.png', heartImageSize, heartImageSize, 50+heartsSpacing+heartsSpacing, 50), ImageSprite('media/half_heart.png', heartImageSize, heartImageSize, 50+heartsSpacing+heartsSpacing, 50)]
+]
 
 #UFO BIG ENDING
-endPic = pygame.image.load("canabal.png")
+endPic = pygame.image.load("media/cannibal.png")
 startRect = endPic.get_rect() 
 startRect.center = (120,100)
 endRect = endPic.get_rect() 
 endRect.center = (gameWindow.width//2,gameWindow.height//2)
 
 #Sound Effect Variables (sound not supported in repl.it)
-laserSound = pygame.mixer.Sound('laser.wav') 
+laserSound = pygame.mixer.Sound('media/laser.wav') 
 
 def drawAll():
     if gamestate == GameState.MAINMENU:
@@ -113,8 +112,8 @@ def drawAll():
     elif gamestate == GameState.GAMEPLAY:
         background.draw()
         player.draw()
-        #gameWindow.display.blit(smallPic, small1Rect)
-        #gameWindow.display.blit(smallPic, small2Rect)
+        for heart in hearts:
+            heart[0].draw()
         for entity in entities:
             entity.draw()
         for rock in rocks:

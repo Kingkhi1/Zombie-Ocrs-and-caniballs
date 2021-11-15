@@ -201,7 +201,7 @@ while running:
             entities[0].rect.move_ip(0,-10)
             
         if keys [pygame.K_SPACE]:
-            rocks.append(Rock('rock.png', 826//10, 662//10, player.rect.centerx, player.rect.centery))
+            rocks.append(Rock('media/rock.png', 826//10, 662//10, player.rect.centerx, player.rect.centery))
 
         colliding = CollisionDetected(entities[0].rect, player.rect) 
         if colliding:

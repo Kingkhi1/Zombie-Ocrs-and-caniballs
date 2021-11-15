@@ -49,10 +49,10 @@ texts = {
 }
 
 class ImageSprite():
-    def __init__(self, image, width, height, x, y):
+    def __init__(self, image, width, height, realX, realY):
         self.image = pygame.transform.scale(pygame.image.load(image), (width, height))
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = (realX, realY)
         self.drawable = True
     def draw(self):
         if self.drawable:
@@ -63,25 +63,25 @@ camera_pos = (0, 0)
 background = ImageSprite("media/background.png", 4096, 4096, 0, 0)
 
 class Player(ImageSprite):
-    def __init__(self, image, width, height, x, y):
+    def __init__(self, image, width, height, realX, realY):
         extClass = super()
-        extClass.__init__(image, width, height, x, y)
+        extClass.__init__(image, width, height, realX, realY)
         self.health = 6
 player = Player('media/player.png', 75, 75, gameWindow.width//2,gameWindow.height//2)
 
 class Entity(ImageSprite):
-    def __init__(self, image, width, height, x, y, type=None):
+    def __init__(self, image, width, height, realX, realY, type=None):
         extClass = super()
-        extClass.__init__(image, width, height, x, y)
+        extClass.__init__(image, width, height, realX, realY)
         self.type = type
 entities = [
     Entity('media/cannibal.png', 90, 90, -100, -100)
 ]
 
 class Rock(ImageSprite):
-    def __init__(self, image, width, height, x, y):
+    def __init__(self, image, width, height, realX, realY):
         extClass = super()
-        extClass.__init__(image, width, height, x, y)
+        extClass.__init__(image, width, height, realX, realY)
         self.health = 100
 rocks = []
 
@@ -175,22 +175,26 @@ while running:
             break
         #Example of moving a rocket sprite left and right with keyboard
         if keys[pygame.K_LEFT]:
+            camera_pos[1] -= 1
             background.rect.move_ip(10,0)
             entities[0].rect.move_ip(10,0)
             for rock in rocks:
                 rock.rect.move_ip(10,0)
  
         if keys [pygame.K_RIGHT]:
+            camera_pos[1] += 1
             background.rect.move_ip(-10,0)
             for rock in rocks:
                 rock.rect.move_ip(-10,0)
             entities[0].rect.move_ip(-10,0)
         if keys[pygame.K_UP]:
+            camera_pos[0] -= 1
             background.rect.move_ip(0,10)
             for rock in rocks:
                 rock.rect.move_ip(0,10)
             entities[0].rect.move_ip(0,10)
         if keys [pygame.K_DOWN]:
+            camera_pos[0] += 1
             background.rect.move_ip(0,-10)
             for rock in rocks:
                 rock.rect.move_ip(0,-10)

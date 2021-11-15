@@ -59,7 +59,7 @@ class ImageSprite():
             gameWindow.display.blit(self.image, self.rect)
 
 #Player movement from 0,0
-camera_pos = (0, 0)
+camera_pos = [0, 0]
 background = ImageSprite("media/background.png", 4096, 4096, 0, 0)
 
 class Player(ImageSprite):

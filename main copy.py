@@ -8,7 +8,7 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 128) 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-water = [(33, 150, 243), (0, 188, 212)]
+water = (33, 150, 243)
 
 class GameState():
     MAINMENU = 1
@@ -57,11 +57,15 @@ class ImageSprite():
         self.drawable = True
     def draw(self):
         if self.drawable:
-            gameWindow.display.blit(self.image, self.rect)
+            gameWindow.display.blit(self.image, pygame.Rect(self.rect.x-camera_pos[0], self.rect.y-camera_pos[1], self.rect.width, self.rect.height))
+    def drawUI(self):
+        if self.drawable:
+            gameWindow.display.blit(self.image, pygame.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height))
 
 #Player movement from 0,0
-camera_pos = [0, 0]
-background = ImageSprite("media/background.png", 4096, 4096, 0, 0)
+camera_pos = [2048, 2048]
+background = ImageSprite("media/background.png", 4096, 4096, 2048, 2048)
+print(background.rect)
 
 class Player(ImageSprite):
     def __init__(self, image, width, height, realX, realY, speed):
@@ -69,7 +73,7 @@ class Player(ImageSprite):
         extClass.__init__(image, width, height, realX, realY)
         self.health = 6
         self.speed = speed
-player = Player('media/player.png', 75, 75, gameWindow.width//2,gameWindow.height//2, 10)
+player = Player('media/player.png', 75, 75, 2048+gameWindow.width//2,2048+gameWindow.height//2, 10)
 
 class Entity(ImageSprite):
     def __init__(self, image, width, height, realX, realY, type=None):
@@ -113,11 +117,9 @@ def drawAll():
 
     elif gamestate == GameState.GAMEPLAY:
         background.draw()
-        if mouseClick:
-            print(gameWindow.display.get_at(mouseXY))
         player.draw()
         for heart in hearts:
-            heart[0].draw()
+            heart[0].drawUI()
         for entity in entities:
             entity.draw()
         for rock in rocks:
@@ -151,9 +153,9 @@ while running:
             gamestate = GameState.GAMEPLAY
         if mouseClick and texts['start'].rect.collidepoint(mouseXY):
             gamestate = GameState.GAMEPLAY
-            entities[0].rect.center = (-250,-650)
-            player.rect.center = (gameWindow.width//2,gameWindow.height//2)
-            background.rect.center = (gameWindow.width//2,gameWindow.height//2)
+            entities[0].rect.center = (1000,1000)
+            #player.rect.center = (gameWindow.width//2,gameWindow.height//2)
+            #background.rect.center = (gameWindow.width//2,gameWindow.height//2)
 
     elif gamestate == GameState.GAMEPLAY:
         #move canabal
@@ -178,31 +180,24 @@ while running:
             entities[0].rect = oldRect
             break
         #Example of moving a rocket sprite left and right with keyboard
+        speed = player.speed
+        print(background.image.get_at((camera_pos[0]+gameWindow.width//2, camera_pos[1]+gameWindow.height//2))[2], water[2])
+        if background.image.get_at((camera_pos[0]+gameWindow.width//2, camera_pos[1]+gameWindow.height//2))[0]==water[0] and background.image.get_at((camera_pos[0]+gameWindow.width//2, camera_pos[1]+gameWindow.height//2))[1]==water[1] and background.image.get_at((camera_pos[0]+gameWindow.width//2, camera_pos[1]+gameWindow.height//2))[2]==water[2]:
+            print("True")
+            speed=speed//2
         if keys[pygame.K_LEFT]:
-            camera_pos[1] -= 1
-            background.rect.move_ip(10,0)
-            entities[0].rect.move_ip(10,0)
-            for rock in rocks:
-                rock.rect.move_ip(10,0)
+            camera_pos[0] -= 10
+            player.rect.move_ip(-speed,0)
  
         if keys [pygame.K_RIGHT]:
-            camera_pos[1] += 1
-            background.rect.move_ip(-10,0)
-            for rock in rocks:
-                rock.rect.move_ip(-10,0)
-            entities[0].rect.move_ip(-10,0)
+            camera_pos[0] += 10
+            player.rect.move_ip(speed,0)
         if keys[pygame.K_UP]:
-            camera_pos[0] -= 1
-            background.rect.move_ip(0,10)
-            for rock in rocks:
-                rock.rect.move_ip(0,10)
-            entities[0].rect.move_ip(0,10)
+            camera_pos[1] -= 10
+            player.rect.move_ip(0,-speed)
         if keys [pygame.K_DOWN]:
-            camera_pos[0] += 1
-            background.rect.move_ip(0,-10)
-            for rock in rocks:
-                rock.rect.move_ip(0,-10)
-            entities[0].rect.move_ip(0,-10)
+            camera_pos[1] += 10
+            player.rect.move_ip(0,speed)
             
         if keys [pygame.K_SPACE]:
             rocks.append(Rock('media/rock.png', 826//10, 662//10, player.rect.centerx, player.rect.centery))

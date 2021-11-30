@@ -15,6 +15,18 @@ class GameState():
     GAMEPLAY = 2
     GAMEOVER = 3
 
+class Items:
+    AIR = 0
+    ROCK = 1
+    PICKAXE = 2
+    AXE = 3
+
+tools = [Items.ROCK, Items.AIR, Items.ROCK, Items.AIR, Items.AIR, Items.AIR, Items.AIR, Items.AIR]
+hotbarSelection = 0
+airPic = pygame.transform.scale(pygame.image.load('media/empty.png'), (80, 80))
+rockPic = pygame.transform.scale(pygame.image.load('media/rock.png'), (80, 80))
+selectionPic = pygame.transform.scale(pygame.image.load('media/selection.png'), (80, 80))
+
 gamestate = GameState.MAINMENU
 
 # Collision Detection #####################################
@@ -124,6 +136,14 @@ def drawAll():
             entity.draw()
         for rock in rocks:
             rock.draw()
+        for x in range(len(tools)):
+            if tools[x] == Items.AIR:
+                aTool = airPic
+            elif tools[x] == Items.ROCK:
+                aTool = rockPic
+            gameWindow.display.blit(aTool, pygame.Rect((80*x)+192, gameWindow.height-100, 80, 80))
+        gameWindow.display.blit(selectionPic, pygame.Rect((80*hotbarSelection)+192, gameWindow.height-100, 80, 80))
+        
     
     elif gamestate == GameState.GAMEOVER:
         endPic2 = pygame.transform.rotate(endPic, 180)
@@ -200,7 +220,26 @@ while running:
             player.rect.move_ip(0,speed)
             
         if keys [pygame.K_SPACE]:
-            rocks.append(Rock('media/rock.png', 826//10, 662//10, player.rect.centerx, player.rect.centery))
+            if tools[hotbarSelection] == Items.ROCK:
+                rocks.append(Rock('media/rock.png', 826//10, 662//10, player.rect.centerx, player.rect.centery))
+                tools[hotbarSelection] = Items.AIR
+
+        if keys [pygame.K_1]:
+            hotbarSelection = 0
+        if keys [pygame.K_2]:
+            hotbarSelection = 1
+        if keys [pygame.K_3]:
+            hotbarSelection = 2
+        if keys [pygame.K_4]:
+            hotbarSelection = 3
+        if keys [pygame.K_5]:
+            hotbarSelection = 4
+        if keys [pygame.K_6]:
+            hotbarSelection = 5
+        if keys [pygame.K_7]:
+            hotbarSelection = 6
+        if keys [pygame.K_8]:
+            hotbarSelection = 7
 
         colliding = CollisionDetected(entities[0].rect, player.rect) 
         if colliding:
